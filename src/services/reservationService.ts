@@ -1,3 +1,7 @@
+import { InitializationError } from "../errors/InitializationError.js";
+import { InvalidInputError } from "../errors/InvalidInputError.js";
+import { NotFoundError } from "../errors/NotFoundError.js";
+import { ReservationError } from "../errors/ReservationError.js";
 import {
   CancellationResult,
   ReservationDataTypes,
@@ -38,29 +42,34 @@ export class ReservationService {
     return this._reservationData;
   }
 
-  initializeTable(count: number): string | Error {
+  initializeTable(tableCount: number | null): string | Error {
     if (this.isInitialized) {
-      throw new Error("Tables have already been initialized.");
+      throw new InitializationError("Tables have already been initialized.");
     }
-    this._totalTableCount = count;
-    this._remainingTable = count;
+
+    if (!tableCount || tableCount < 1) {
+      throw new InvalidInputError("Invalid number of tableCount.");
+    }
+
+    this._totalTableCount = tableCount;
+    this._remainingTable = tableCount;
     this._isInitialized = true;
     return "Tables initialized successfully.";
   }
 
-  reserveTable(customers: number | null): Error | ReservationResult {
+  reserveTable(customerCount: number | null): Error | ReservationResult {
     if (!this.isInitialized) {
-      throw new Error("Tables have not been initialized.");
+      throw new InitializationError("Tables have not been initialized.");
     }
 
-    if (!customers || customers < 1) {
-      throw new Error("Invalid number of customers.");
+    if (!customerCount || customerCount < 1) {
+      throw new InvalidInputError("Invalid number of customerCount.");
     }
 
-    const requiredTables = Math.ceil(customers / 4);
+    const requiredTables = Math.ceil(customerCount / 4);
 
     if (requiredTables > this.remainingTable) {
-      throw new Error("Not enough tables available.");
+      throw new ReservationError("Not enough tables available.");
     }
 
     const bookingId = `booking_${Date.now()}`;
@@ -79,16 +88,16 @@ export class ReservationService {
 
   cancelReservation(bookingId: string | null): Error | CancellationResult {
     if (!this.isInitialized) {
-      throw new Error("Tables have not been initialized.");
+      throw new InitializationError("Tables have not been initialized.");
     }
 
     if (!bookingId) {
-      throw new Error("Invalid bookingId.");
+      throw new InvalidInputError("Invalid bookingId.");
     }
 
     const reservation = this.reservationData[bookingId];
     if (!reservation) {
-      throw new Error("Booking ID not found.");
+      throw new NotFoundError("Booking ID not found.");
     }
 
     this._remainingTable += reservation.tableCount;

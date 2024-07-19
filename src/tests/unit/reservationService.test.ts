@@ -1,6 +1,7 @@
 import {
   CancellationResult,
   Reservation,
+  ReservationDataTypes,
   ReservationResult,
 } from "../../models/reservation.js";
 import reservationService from "../../services/reservationService.js";
@@ -10,6 +11,13 @@ describe("ReservationService", () => {
     reservationService["_isInitialized"] = false;
     reservationService["_totalTableCount"] = 0;
     reservationService["_remainingTable"] = 0;
+    reservationService["_reservationData"] = {} as ReservationDataTypes;
+  });
+
+  test("initializeTable should get an error 'Tables have already been initialized.'", () => {
+    expect(() => reservationService.initializeTable(null)).toThrow(
+      "Invalid number of tableCount."
+    );
   });
 
   test("initializeTables should initialize tables", () => {
@@ -41,12 +49,12 @@ describe("ReservationService", () => {
     }).not.toThrow("Tables have not been initialized.");
   });
 
-  test("reserveTable should get 'Invalid number of customers.' error, when invalid input", () => {
+  test("reserveTable should get 'Invalid number of customerCount.' error, when invalid input", () => {
     reservationService.initializeTable(10);
 
     expect(() => {
       reservationService.reserveTable(null);
-    }).toThrow("Invalid number of customers.");
+    }).toThrow("Invalid number of customerCount.");
   });
 
   test("reserveTable should get 'Not enough tables available.' error, when Not enough tables left", () => {
@@ -57,7 +65,7 @@ describe("ReservationService", () => {
     );
   });
 
-  test("reserveTable should get 'Invalid number of customers.' when invalid input", () => {
+  test("reserveTable should get 'Invalid number of customerCount.' when invalid input", () => {
     reservationService.initializeTable(10);
 
     expect(reservationService.reserveTable(6)).toEqual<ReservationResult>({
