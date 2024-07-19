@@ -6,3 +6,9 @@ export interface Reservation {
 export interface ReservationDataTypes {
   [key: string]: Reservation;
 }
+
+export interface ReservationResult {
+  bookingId: string;
+  bookedTableCount: number;
+  remainingTable: number;
+}

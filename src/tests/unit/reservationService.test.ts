@@ -1,3 +1,4 @@
+import { ReservationResult } from "../../models/reservation.js";
 import reservationService from "../../services/reservationService.js";
 
 describe("ReservationService", () => {
@@ -55,7 +56,7 @@ describe("ReservationService", () => {
   test("reserveTable should get 'Invalid number of customers.' when invalid input", () => {
     reservationService.initializeTable(10);
 
-    expect(reservationService.reserveTable(6)).toEqual({
+    expect(reservationService.reserveTable(6)).toEqual<ReservationResult>({
       bookingId: expect.any(String),
       bookedTableCount: 2,
       remainingTable: 8,
