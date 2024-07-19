@@ -1,7 +1,7 @@
 import reservationService from "../../services/reservationService.js";
 
 describe("ReservationService", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     reservationService["_isInitialized"] = false;
     reservationService["_totalTableCount"] = 0;
     reservationService["_remainingTable"] = 0;
@@ -15,9 +15,50 @@ describe("ReservationService", () => {
     expect(reservationService["remainingTable"]).toBe(10);
   });
 
-  test("initializeTable should get an error after initialize", () => {
+  test("initializeTable should get an error 'Tables have already been initialized.'", () => {
+    reservationService.initializeTable(10);
     expect(() => reservationService.initializeTable(10)).toThrow(
       "Tables have already been initialized."
     );
+  });
+
+  test("reserveTable should get an error 'Tables have not been initialized.'", () => {
+    expect(() => {
+      reservationService.reserveTable(null);
+    }).toThrow("Tables have not been initialized.");
+  });
+
+  test("reserveTable should be called after initialized", () => {
+    reservationService.initializeTable(10);
+
+    expect(() => {
+      reservationService.reserveTable(null);
+    }).not.toThrow("Tables have not been initialized.");
+  });
+
+  test("reserveTable should get 'Invalid number of customers.' error, when invalid input", () => {
+    reservationService.initializeTable(10);
+
+    expect(() => {
+      reservationService.reserveTable(null);
+    }).toThrow("Invalid number of customers.");
+  });
+
+  test("reserveTable should get 'Not enough tables available.' error, when Not enough tables left", () => {
+    reservationService.initializeTable(10);
+
+    expect(() => reservationService.reserveTable(41)).toThrow(
+      "Not enough tables available."
+    );
+  });
+
+  test("reserveTable should get 'Invalid number of customers.' when invalid input", () => {
+    reservationService.initializeTable(10);
+
+    expect(reservationService.reserveTable(6)).toEqual({
+      bookingId: expect.any(String),
+      bookedTableCount: 2,
+      remainingTable: 8,
+    });
   });
 });

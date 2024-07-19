@@ -43,6 +43,35 @@ export class ReservationService {
     this._isInitialized = true;
     return "Tables initialized successfully.";
   }
+
+  reserveTable(customers: number | null) {
+    if (!this._isInitialized) {
+      throw new Error("Tables have not been initialized.");
+    }
+
+    if (!customers || customers < 1) {
+      throw new Error("Invalid number of customers.");
+    }
+
+    const requiredTables = Math.ceil(customers / 4);
+
+    if (requiredTables > this._remainingTable) {
+      throw new Error("Not enough tables available.");
+    }
+
+    const bookingId = `booking_${Date.now()}`;
+    this._reservationData[bookingId] = {
+      bookingId,
+      tableCount: requiredTables,
+    };
+    this._remainingTable -= requiredTables;
+
+    return {
+      bookingId,
+      bookedTableCount: requiredTables,
+      remainingTable: this._remainingTable,
+    };
+  }
 }
 
 export default new ReservationService(0, 0, false, {});
