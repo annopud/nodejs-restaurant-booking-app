@@ -30,4 +30,15 @@ describe("Reservation Routes", () => {
     expect(res.status).toBe(409);
     expect(res.body.error).toBe("Tables have already been initialized.");
   });
+
+  test("reserve should return 409, 'Not enough tables available.'", async () => {
+    await request(app).post("/api/initialize").send({ tableCount: 10 });
+
+    const res = await request(app)
+      .post("/api/reserve")
+      .send({ customerCount: 41 });
+
+    expect(res.status).toBe(409);
+    expect(res.body.error).toBe("Not enough tables available.");
+  });
 });

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { InvalidInputError } from "../errors/InvalidInputError.js";
 import { InitializationError } from "../errors/InitializationError.js";
+import { ReservationError } from "../errors/ReservationError.js";
 
 const errorHandler = (
   err: Error,
@@ -12,7 +13,7 @@ const errorHandler = (
     return res.status(400).json({ error: err.message });
   }
 
-  if (err instanceof InitializationError) {
+  if (err instanceof InitializationError || err instanceof ReservationError) {
     return res.status(409).json({ error: err.message });
   }
 
