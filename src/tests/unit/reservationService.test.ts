@@ -1,4 +1,8 @@
-import { ReservationResult } from "../../models/reservation.js";
+import {
+  CancellationResult,
+  Reservation,
+  ReservationResult,
+} from "../../models/reservation.js";
 import reservationService from "../../services/reservationService.js";
 
 describe("ReservationService", () => {
@@ -61,5 +65,55 @@ describe("ReservationService", () => {
       bookedTableCount: 2,
       remainingTable: 8,
     });
+  });
+
+  test("cancelReservation should get an error 'Tables have not been initialized.'", () => {
+    expect(() => {
+      reservationService.cancelReservation(null);
+    }).toThrow("Tables have not been initialized.");
+  });
+
+  test("cancelReservation should get an error 'Invalid bookingId.'", () => {
+    reservationService.initializeTable(10);
+
+    expect(() => {
+      reservationService.cancelReservation(null);
+    }).toThrow("Invalid bookingId.");
+  });
+
+  test("cancelReservation should get an error 'Booking ID not found.', when booking id does not exist on reservation data", () => {
+    reservationService["_isInitialized"] = true;
+    reservationService["_totalTableCount"] = 10;
+    reservationService["_remainingTable"] = 8;
+    reservationService["_reservationData"] = {
+      booking_1: { bookingId: "booking_1", tableCount: 2 },
+    };
+
+    expect(() => {
+      reservationService.cancelReservation("booking_2");
+    }).toThrow("Booking ID not found.");
+  });
+
+  test("cancelReservation should get an error 'Invalid bookingId.'", () => {
+    reservationService["_isInitialized"] = true;
+    reservationService["_totalTableCount"] = 10;
+    reservationService["_remainingTable"] = 8;
+    reservationService["_reservationData"] = {
+      booking_1: { bookingId: "booking_1", tableCount: 2 },
+    };
+
+    console.log("reservationService", reservationService);
+    const result = reservationService.cancelReservation("booking_1");
+    expect(result).toEqual<CancellationResult>({
+      freedTableCount: 2,
+      remainingTable: 10,
+    });
+
+    expect(reservationService["isInitialized"]).toBe(true);
+    expect(reservationService["totalTableCount"]).toBe(10);
+    expect(reservationService["remainingTable"]).toBe(10);
+    expect(reservationService["reservationData"]).toEqual<Reservation>(
+      {} as Reservation
+    );
   });
 });

@@ -1,4 +1,5 @@
 import {
+  CancellationResult,
   ReservationDataTypes,
   ReservationResult,
 } from "../models/reservation.js";
@@ -38,7 +39,7 @@ export class ReservationService {
   }
 
   initializeTable(count: number): string | Error {
-    if (this._isInitialized) {
+    if (this.isInitialized) {
       throw new Error("Tables have already been initialized.");
     }
     this._totalTableCount = count;
@@ -48,7 +49,7 @@ export class ReservationService {
   }
 
   reserveTable(customers: number | null): Error | ReservationResult {
-    if (!this._isInitialized) {
+    if (!this.isInitialized) {
       throw new Error("Tables have not been initialized.");
     }
 
@@ -58,12 +59,12 @@ export class ReservationService {
 
     const requiredTables = Math.ceil(customers / 4);
 
-    if (requiredTables > this._remainingTable) {
+    if (requiredTables > this.remainingTable) {
       throw new Error("Not enough tables available.");
     }
 
     const bookingId = `booking_${Date.now()}`;
-    this._reservationData[bookingId] = {
+    this.reservationData[bookingId] = {
       bookingId,
       tableCount: requiredTables,
     };
@@ -72,7 +73,30 @@ export class ReservationService {
     return {
       bookingId,
       bookedTableCount: requiredTables,
-      remainingTable: this._remainingTable,
+      remainingTable: this.remainingTable,
+    };
+  }
+
+  cancelReservation(bookingId: string | null): Error | CancellationResult {
+    if (!this.isInitialized) {
+      throw new Error("Tables have not been initialized.");
+    }
+
+    if (!bookingId) {
+      throw new Error("Invalid bookingId.");
+    }
+
+    const reservation = this.reservationData[bookingId];
+    if (!reservation) {
+      throw new Error("Booking ID not found.");
+    }
+
+    this._remainingTable += reservation.tableCount;
+    delete this.reservationData[bookingId];
+
+    return {
+      freedTableCount: reservation.tableCount,
+      remainingTable: this.remainingTable,
     };
   }
 }

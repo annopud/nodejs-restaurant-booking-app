@@ -12,3 +12,8 @@ export interface ReservationResult {
   bookedTableCount: number;
   remainingTable: number;
 }
+
+export interface CancellationResult {
+  freedTableCount: number;
+  remainingTable: number;
+}
