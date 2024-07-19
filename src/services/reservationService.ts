@@ -1,4 +1,7 @@
-import { ReservationDataTypes } from "../models/reservation.js";
+import {
+  ReservationDataTypes,
+  ReservationResult,
+} from "../models/reservation.js";
 
 export class ReservationService {
   private _totalTableCount: number;
@@ -44,7 +47,7 @@ export class ReservationService {
     return "Tables initialized successfully.";
   }
 
-  reserveTable(customers: number | null) {
+  reserveTable(customers: number | null): Error | ReservationResult {
     if (!this._isInitialized) {
       throw new Error("Tables have not been initialized.");
     }
