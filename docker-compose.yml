@@ -1,0 +1,9 @@
+services:
+  booking_api:
+    container_name: restaurant_booking_api
+    build: 
+      context: .
+    ports:
+      - ${PORT-3000}:${PORT-3000}
+    environment:
+      - PORT=${PORT-3000}
