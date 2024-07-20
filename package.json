@@ -9,6 +9,7 @@
     "start": "tsc && node ./dist/index.js",
     "dev": "NODE_ENV=development nodemon ./src/index.ts",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
     "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watchAll",
     "lint": "eslint .",
     "prettier": "prettier --write src"
