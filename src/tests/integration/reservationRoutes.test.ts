@@ -101,7 +101,7 @@ describe("Reservation Routes", () => {
 
   test("cancel should return 400, 'Invalid bookingId.'", async () => {
     await request(app).post("/api/initialize").send({ tableCount: 10 });
-    const reserveResponse = await request(app)
+    await request(app)
       .post("/api/reserve")
       .send({ customerCount: 6 });
 
@@ -115,7 +115,7 @@ describe("Reservation Routes", () => {
 
   test("cancel should return 404, 'Booking ID not found.'", async () => {
     await request(app).post("/api/initialize").send({ tableCount: 10 });
-    const reserveResponse = await request(app)
+    await request(app)
       .post("/api/reserve")
       .send({ customerCount: 6 });
 

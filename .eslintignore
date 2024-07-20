@@ -1,0 +1,2 @@
+# ignore linting for compiled output
+dist
