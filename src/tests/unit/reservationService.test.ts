@@ -99,7 +99,6 @@ describe('ReservationService', () => {
       booking_1: { bookingId: 'booking_1', tableCount: 2 },
     };
 
-    console.log('reservationService', reservationService);
     const result = reservationService.cancelReservation('booking_1');
     expect(result).toEqual<CancellationResult>({
       freedTableCount: 2,
