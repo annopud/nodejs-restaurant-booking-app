@@ -70,6 +70,27 @@ npm run dev
 PORT=3300
 ```
 
+## Development Eslint and Prettier
+
+**Eslint:**
+
+```bash
+npm run lint
+```
+or
+```bash
+npx eslint .
+```
+**Prettier:**
+
+```bash
+npm run prettier
+```
+or use npx for customize destination files
+```bash
+npx prettier --write src
+```
+
 ## Testing
 
 **Testing:**
