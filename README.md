@@ -72,14 +72,21 @@ PORT=3300
 
 ## Testing
 
-**Unit testing:**
+**Testing:**
 
 ```bash
 npm run test
 ```
 
-**Unit testing with automatic reload:**
+**Testing with auto reload:**
 
 ```bash
 npm run test:watch
 ```
+
+**Testing with code coverage:**
+
+```bash
+npm run test:coverage
+```
+
