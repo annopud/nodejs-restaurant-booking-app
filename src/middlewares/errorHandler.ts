@@ -17,7 +17,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
     return res.status(404).json({ error: err.message });
   }
 
-  res.status(500).json({ error: err.message });
+  return res.status(500).json({ error: err.message });
 };
 
 export default errorHandler;

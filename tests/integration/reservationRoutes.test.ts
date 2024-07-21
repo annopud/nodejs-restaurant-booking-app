@@ -1,7 +1,7 @@
 import request from 'supertest';
-import app from '../../app.js';
-import reservationService from '../../services/reservationService.js';
-import { CancellationResult, ReservationDataTypes, ReservationResult } from '../../models/reservation.js';
+import app from '../../src/app.js';
+import reservationService from '../../src/services/reservationService.js';
+import { CancellationResult, ReservationDataTypes, ReservationResult } from '../../src/models/reservation.js';
 
 describe('Reservation Routes', () => {
   beforeEach(() => {
