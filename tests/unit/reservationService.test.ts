@@ -1,4 +1,9 @@
-import { CancellationResult, Reservation, ReservationDataTypes, ReservationResult } from '../../src/models/reservation.js';
+import {
+  CancellationResult,
+  Reservation,
+  ReservationDataTypes,
+  ReservationResult,
+} from '../../src/models/reservation.js';
 import reservationService from '../../src/services/reservationService.js';
 
 describe('ReservationService', () => {
